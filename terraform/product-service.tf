@@ -65,7 +65,7 @@ resource "azurerm_windows_function_app" "products_service" {
 
     # Enable function invocations from Azure Portal.
     cors {
-      allowed_origins = ["https://portal.azure.com"]
+      allowed_origins = ["*"]
     }
 
     application_stack {
