@@ -1,11 +1,12 @@
+require('dotenv').config();
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { products } from "../__mocks__";
-import { error } from "console";
+import { productsContainer } from "../common/db";
+
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
     const id = req.params.id;
-    
+
     if (!id) {
         context.res = {
             status: 400,
@@ -15,19 +16,32 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         }
     }
 
-    const product = products.find(product => product.id === Number(id));
+    try {
+        const { resource: item } = await productsContainer.item(id, id).read();
 
-    if (!product) {
+        if (!item) {
+            context.log("Product not found");
+
+            context.res = {
+                status: 404,
+                body: { error: "Product not found" }
+            }
+
+            return
+        }
+
         context.res = {
-            status: 404,
-            body: { error: "Product not found" }
+            body: item
+        };
+    } catch (error) {
+        const errorMessage = "Error reading item: " + error.message;
+        context.log(errorMessage);
+
+        context.res = {
+            status: 500,
+            body: { error: errorMessage }
         }
     }
-
-    context.res = {
-        body: product
-    };
-
 };
 
 export default httpTrigger;
