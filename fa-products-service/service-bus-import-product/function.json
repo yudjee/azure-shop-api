@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "mySbMsg",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "queueName": "import_products_queue",
+      "connection": "ServiceBusConnection"
+    }
+  ],
+  "scriptFile": "../dist/service-bus-import-product/index.js"
+}

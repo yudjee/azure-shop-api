@@ -3,3 +3,4 @@ export const dbKey = process.env.COSMOS_DB_KEY;
 export const databaseName = `products-db`;
 export const productsContainerName = `products`;
 export const stocksContainerName = `stock`;
+export const serviveBusName = 'sb-import-service';
